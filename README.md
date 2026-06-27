@@ -1,13 +1,16 @@
-# HR Agent
-A small MVP for a computer vision pipeline that is able to recognize and extract objects from a picture, extract barcodes, read them and associate each barcode with each object.
+# Automating HR with Agents
+MVP for automating the initial screenings of HR processes (Mostly outside white collar jobs) with stateful agents and human in the loop for the important stuff. This project can make use of an OpenAI token to be ran but its designed to run in a local opensource stack for sensitive PII handling and avoiding lock in.
 
 ## Structure 
 
-This repository is structured using MLOps principles and patterns first, so this is the reason behind the split of **research/**, **src/** and **production** which showcases a final demonstration of the product. The directory structure is:
+This repository is structured using MLOps principles and patterns first being the directory structure:
 
 1. **production/**: API + UI for ease of usage and scaling to production.
-2. **src/**: Modular source code to use for production, ready for deployment as a PyPI library
-3. **research/**: Notebooks, scripts and other artifacts dedicated to research and fast iteration.
+2. **docs/**:
+3.
+
+## Stack
+This project is designed to be ran fully on premise and opensource but also with the possibility of using external LLM providers (OpenAI, Anthropic, DeepSeek...) for deployments with out on-premise gpu's. The tech stack has been selected following the principle of less complexity first (More on it on docs/design-tradeoffs.md):
 
 ## Install
 
@@ -17,19 +20,13 @@ In order to fully reproduce and run this project you can either opt out for loca
 
 ```python 
 brew install pyenv # For mac
-pyenv install 3.13.12
-pyenv virtualenv 3.13.12 barcodes 
-pyenv activate barcodes
-pyenv local barcodes
+sudo apt install 
+pyenv install 3.13.0
+pyenv virtualenv 3.13.0 hr
+pyenv activate hr
+pyenv local hr
 pip install -r requirements.
-python -m ipykernel install --user --name=$(basename $VIRTUAL_ENV)
 ``` 
-
-Depending on the tool used for jupyter you will need plumbing of the python interpreter path if it doesn't pop out automatically, which will be something like:
-
-```
-~/.pyenv/versions/barcodes/bin/python
-```
 
 ### Docker installation
 
@@ -42,12 +39,7 @@ Depending on the tool used for jupyter you will need plumbing of the python inte
 ```
 ## License & Authors
 
-This project has been singlehandedly made by Walter Troiani, but special thanks to the research team of DINO for the great self-supervised model and to Sobel for the great filters :)
+This project has been singlehandedly made by Walter Troiani, but special thanks to all the contributors of the open source packages used throughout the project.
 
 This project is licensed under Apache 2.0.
 
-## Next Steps / Ideas / WIP
-
-- Small LLM to act as textual UI for the user (Not enough compute on my laptop), even a small Qwen 3 0.6B would suffice for this task.
-
-- 
