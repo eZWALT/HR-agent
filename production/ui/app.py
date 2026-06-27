@@ -1,4 +1,5 @@
 import os
+import uuid
 
 import streamlit as st
 import httpx
@@ -10,6 +11,7 @@ if "config" not in st.session_state:
         r = c.get(f"{BACKEND_URL}/config", timeout=10)
         st.session_state.config = r.json()
         st.session_state.messages = []
+        st.session_state.user_id = str(uuid.uuid4())
         greeting = st.session_state.config.get("greeting", "")
         if greeting:
             st.session_state.messages.append({"role": "assistant", "content": greeting})
@@ -47,7 +49,12 @@ if msg:
     with st.chat_message("assistant"):
         def stream():
             with httpx.Client() as c:
-                with c.stream("POST", f"{BACKEND_URL}/chat", json={"message": msg}, timeout=60) as r:
+                with c.stream(
+                    "POST",
+                    f"{BACKEND_URL}/chat",
+                    json={"message": msg, "user_id": st.session_state.user_id},
+                    timeout=60,
+                ) as r:
                     for line in r.iter_lines():
                         if not line:
                             continue
