@@ -13,6 +13,7 @@ OLLAMA_GPU0_MODEL = os.getenv("OLLAMA_GPU0_MODEL", "qwen2.5:27b")
 LLM_BACKEND = os.getenv("LLM_BACKEND", "ollama")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+CLIENT_SLUG = os.getenv("CLIENT_SLUG", "grupo-sazon")
 
 
 class ChatRequest(BaseModel):
@@ -64,14 +65,12 @@ async def _stream_openai(client, messages):
 
 @app.get("/config")
 async def get_config():
-    # TODO: query `clients` table from DB for multi-tenant support.
-    #       The `clients` table has a `config JSONB` column for per-client settings.
-    return {
-        "client_name": "Grupo Sazón",
-        "assistant_name": "María",
-        "emoji": "🌶️",
-        "greeting": "¡Hola! Soy María, tu asistente de selección en Grupo Sazón. Para comenzar, ¿tienes licencia de conducir vigente?",
-    }
+    path = f"data/{CLIENT_SLUG}/config.json"
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"error": f"config not found for client: {CLIENT_SLUG}"}
 
 
 @app.get("/health")

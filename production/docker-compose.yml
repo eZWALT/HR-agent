@@ -35,6 +35,9 @@ services:
       OLLAMA_GPU1_MODELS: ${OLLAMA_GPU1_MODELS:-llama3:8b,mistral}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      CLIENT_SLUG: ${CLIENT_SLUG:-grupo-sazon}
+    volumes:
+      - ../data:/app/data
     depends_on:
       db:
         condition: service_healthy
