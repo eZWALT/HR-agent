@@ -12,13 +12,14 @@ from loguru import logger
 
 OLLAMA_ENDPOINT_GPU0 = os.getenv("OLLAMA_ENDPOINT_GPU0", "http://host.docker.internal:5555")
 OLLAMA_GPU0_MODEL = os.getenv("OLLAMA_GPU0_MODEL", "qwen3.6:35b")
+OLLAMA_NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "8192"))
 LLM_BACKEND = os.getenv("LLM_BACKEND", "ollama")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 CLIENT_SLUG = os.getenv("CLIENT_SLUG", "grupo-sazon")
 
 logger.info("starting up")
-logger.info(f"LLM_BACKEND={LLM_BACKEND} OPENAI_MODEL={OPENAI_MODEL} CLIENT_SLUG={CLIENT_SLUG}")
+logger.info(f"LLM_BACKEND={LLM_BACKEND} OPENAI_MODEL={OPENAI_MODEL} CLIENT_SLUG={CLIENT_SLUG} OLLAMA_NUM_CTX={OLLAMA_NUM_CTX}")
 logger.info(f"OLLAMA_ENDPOINT_GPU0={OLLAMA_ENDPOINT_GPU0} OLLAMA_GPU0_MODEL={OLLAMA_GPU0_MODEL}")
 logger.info(f"OPENAI_API_KEY={'set' if OPENAI_API_KEY else 'not set'}")
 
@@ -119,14 +120,14 @@ async def chat(req: ChatRequest):
 
 
 async def _stream_ollama(client, messages):
-    """Send full message history to Ollama. Appends the AI reply to thread."""
     url = f"{OLLAMA_ENDPOINT_GPU0}/api/chat"
     payload = {
         "model": OLLAMA_GPU0_MODEL,
         "messages": messages,
         "stream": True,
+        "options": {"num_ctx": OLLAMA_NUM_CTX},
     }
-    logger.debug(f"ollama payload: model={OLLAMA_GPU0_MODEL}")
+    logger.debug(f"ollama payload: model={OLLAMA_GPU0_MODEL} num_ctx={OLLAMA_NUM_CTX}")
     full_reply = ""
     async with client.stream("POST", url, json=payload, timeout=120) as r:
         r.raise_for_status()
@@ -148,7 +149,6 @@ async def _stream_ollama(client, messages):
 
 
 async def _stream_openai(client, messages):
-    """Send full message history to OpenAI. Appends the AI reply to thread."""
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}",
@@ -179,56 +179,3 @@ async def _stream_openai(client, messages):
                 yield f"data: {chunk}\n\n"
     if full_reply:
         messages.append({"role": "assistant", "content": full_reply})
-
-
-async def _stream_ollama(client, messages):
-    url = f"{OLLAMA_ENDPOINT_GPU0}/api/chat"
-    payload = {
-        "model": OLLAMA_GPU0_MODEL,
-        "messages": messages,
-        "stream": True,
-    }
-    logger.debug(f"ollama payload: model={OLLAMA_GPU0_MODEL}")
-    async with client.stream("POST", url, json=payload, timeout=120) as r:
-        r.raise_for_status()
-        count = 0
-        async for line in r.aiter_lines():
-            if not line:
-                continue
-            data = json.loads(line)
-            chunk = data.get("message", {}).get("content", "")
-            if chunk:
-                count += 1
-                yield f"data: {chunk}\n\n"
-            if data.get("done"):
-                logger.debug(f"ollama stream done — {count} chunks")
-                yield "data: [DONE]\n\n"
-
-
-async def _stream_openai(client, messages):
-    url = "https://api.openai.com/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {OPENAI_API_KEY}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "model": OPENAI_MODEL,
-        "messages": messages,
-        "stream": True,
-    }
-    logger.debug(f"openai payload: model={OPENAI_MODEL}")
-    async with client.stream("POST", url, json=payload, headers=headers, timeout=120) as r:
-        r.raise_for_status()
-        count = 0
-        async for line in r.aiter_lines():
-            if not line or not line.startswith("data: "):
-                continue
-            if line == "data: [DONE]":
-                logger.debug(f"openai stream done — {count} chunks")
-                yield "data: [DONE]\n\n"
-                return
-            data = json.loads(line[6:])
-            chunk = data.get("choices", [{}])[0].get("delta", {}).get("content", "")
-            if chunk:
-                count += 1
-                yield f"data: {chunk}\n\n"
