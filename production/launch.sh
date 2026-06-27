@@ -40,10 +40,12 @@ start_ollama_per_gpu() {
 
 case "$MODE" in
   ollama)
+    export LLM_BACKEND=ollama
     start_ollama_per_gpu
     ;;
   openai)
     [[ -z "$OPENAI_API_KEY" ]] && { echo "need OPENAI_API_KEY"; exit 1; }
+    export LLM_BACKEND=openai
     docker compose $ENV_FILE -f "$COMPOSE_FILE" up --build
     ;;
 esac
