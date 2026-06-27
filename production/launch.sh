@@ -24,8 +24,20 @@ start_ollama_per_gpu() {
       OLLAMA_HOST="0.0.0.0:${!port_var}" \
       OLLAMA_KEEP_ALIVE="${OLLAMA_KEEP_ALIVE:--1}" \
       "$OLLAMA_BIN" serve &
+    local ollama_pid=$!
 
-    until curl -sf "http://localhost:${!port_var}/api/tags" >/dev/null 2>&1; do sleep 1; done
+    local retries=0
+    until curl -sf "http://localhost:${!port_var}/api/tags" >/dev/null 2>&1; do
+      sleep 1
+      ((retries++))
+      if [[ $retries -ge 10 ]]; then
+        echo "WARN: GPU${gpu_idx} (port ${!port_var}) not ready after 10s, skipping"
+        kill "$ollama_pid" 2>/dev/null || true
+        break
+      fi
+    done
+
+    [[ $retries -ge 10 ]] && { ((gpu_idx++)); continue; }
 
     for model in ${!models_var//,/ }; do
       "$OLLAMA_BIN" list | grep -q "^$model" && continue
