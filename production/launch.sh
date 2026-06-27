@@ -15,61 +15,66 @@ OLLAMA_PIDS=()
 cleanup() {
   echo "shutting down..."
   docker compose -f "$COMPOSE_FILE" down 2>/dev/null || true
-  for pid in "${OLLAMA_PIDS[@]}"; do
-    kill "$pid" 2>/dev/null || true
-  done
+  for pid in "${OLLAMA_PIDS[@]}"; do kill "$pid" 2>/dev/null || true; done
 }
 trap cleanup EXIT INT TERM
 
-start_ollama_per_gpu() {
-  local gpu_idx=0
-  while true; do
-    local port_var="OLLAMA_GPU${gpu_idx}_PORT"
-    local models_var="OLLAMA_GPU${gpu_idx}_MODELS"
-    local devices_var="OLLAMA_GPU${gpu_idx}_VISIBLE_DEVICES"
-    [[ -z "${!port_var}" ]] && break
-
-    local port="${!port_var}"
-
-    if curl -sf "http://localhost:${port}/api/tags" >/dev/null 2>&1; then
-      echo "GPU${gpu_idx} already running on port ${port}, reusing"
-    else
-      echo "GPU${gpu_idx} starting ollama on port ${port}..."
-      CUDA_VISIBLE_DEVICES="${!devices_var}" \
-        OLLAMA_HOST="0.0.0.0:${port}" \
-        OLLAMA_KEEP_ALIVE="${OLLAMA_KEEP_ALIVE:--1}" \
-        "$OLLAMA_BIN" serve &
-      OLLAMA_PIDS+=($!)
-
-      local retries=0
-      until curl -sf "http://localhost:${port}/api/tags" >/dev/null 2>&1; do
-        sleep 1
-        ((retries++))
-        if [[ $retries -ge 10 ]]; then
-          echo "WARN: GPU${gpu_idx} (port ${port}) not ready after 10s, skipping"
-          break
-        fi
-      done
-
-      [[ $retries -ge 10 ]] && { ((gpu_idx++)); continue; }
+ollama_serve() {
+  local port=$1 gpu_idx=$2 devices=$3
+  if curl -sf "http://localhost:${port}/api/tags" >/dev/null 2>&1; then
+    echo "  GPU${gpu_idx} already running on port ${port}, reusing"
+    return 0
+  fi
+  echo "  GPU${gpu_idx} starting ollama on port ${port}..."
+  CUDA_VISIBLE_DEVICES="${devices}" \
+    OLLAMA_HOST="0.0.0.0:${port}" \
+    OLLAMA_KEEP_ALIVE="${OLLAMA_KEEP_ALIVE:--1}" \
+    "$OLLAMA_BIN" serve &
+  OLLAMA_PIDS+=($!)
+  local i=0
+  until curl -sf "http://localhost:${port}/api/tags" >/dev/null 2>&1; do
+    sleep 1; ((i++))
+    if [[ $i -ge 10 ]]; then
+      echo "  WARN: GPU${gpu_idx} not ready after 10s, skipping"
+      return 1
     fi
-
-    for model in ${!models_var//,/ }; do
-      OLLAMA_HOST="localhost:${port}" "$OLLAMA_BIN" list 2>/dev/null | grep -q "^${model}" && continue
-      echo "  pulling ${model}..."
-      OLLAMA_HOST="localhost:${port}" "$OLLAMA_BIN" pull "$model" || echo "  WARN: pull ${model} failed"
-    done
-
-    ((gpu_idx++))
   done
+}
+
+ollama_pull() {
+  local port=$1 model=$2
+  if OLLAMA_HOST="localhost:${port}" "$OLLAMA_BIN" list 2>/dev/null | grep -q "^${model}"; then
+    echo "  model ${model} already present"
+  else
+    echo "  pulling ${model}..."
+    OLLAMA_HOST="localhost:${port}" "$OLLAMA_BIN" pull "$model" || echo "  WARN: pull ${model} failed"
+  fi
+}
+
+launch_ollama() {
+  export LLM_BACKEND=ollama
+
+  # GPU0 — required
+  if ollama_serve "${OLLAMA_GPU0_PORT:-5555}" 0 "${OLLAMA_GPU0_VISIBLE_DEVICES:-0}"; then
+    ollama_pull "${OLLAMA_GPU0_PORT:-5555}" "${OLLAMA_GPU0_MODEL:-qwen3.6:35b}"
+  fi
+
+  # GPU1 — best-effort (skip if busy/unavailable)
+  if [[ -n "${OLLAMA_GPU1_PORT:-}" ]]; then
+    if ollama_serve "$OLLAMA_GPU1_PORT" 1 "${OLLAMA_GPU1_VISIBLE_DEVICES:-1}"; then
+      IFS=',' read -ra MODELS <<< "${OLLAMA_GPU1_MODELS:-}"
+      for model in "${MODELS[@]}"; do
+        ollama_pull "$OLLAMA_GPU1_PORT" "$model"
+      done
+    fi
+  fi
 
   docker compose $ENV_FILE -f "$COMPOSE_FILE" up --build
 }
 
 case "$MODE" in
   ollama)
-    export LLM_BACKEND=ollama
-    start_ollama_per_gpu
+    launch_ollama
     ;;
   openai)
     [[ -z "$OPENAI_API_KEY" ]] && { echo "need OPENAI_API_KEY"; exit 1; }
