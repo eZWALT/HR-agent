@@ -1,0 +1,66 @@
+services:
+  db:
+    image: pgvector/pgvector:pg15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sazon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sazon_password}
+      POSTGRES_DB: ${POSTGRES_DB:-sazon_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - sazon_db_data:/var/lib/postgresql/data
+      - ./database/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sazon-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sazon} -d ${POSTGRES_DB:-sazon_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-sazon}:${POSTGRES_PASSWORD:-sazon_password}@db:5432/${POSTGRES_DB:-sazon_db}
+      LLM_BACKEND: ${LLM_BACKEND:-ollama}
+      OLLAMA_ENDPOINT_GPU0: http://${OLLAMA_HOST:-host.docker.internal}:${OLLAMA_GPU0_PORT:-11434}
+      OLLAMA_ENDPOINT_GPU1: http://${OLLAMA_HOST:-host.docker.internal}:${OLLAMA_GPU1_PORT:-11435}
+      OLLAMA_GPU0_MODEL: ${OLLAMA_GPU0_MODEL:-qwen2.5:27b}
+      OLLAMA_GPU1_MODELS: ${OLLAMA_GPU1_MODELS:-llama3:8b,mistral}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sazon-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  streamlit:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "${STREAMLIT_PORT:-8501}:8501"
+    env_file:
+      - .env
+    environment:
+      BACKEND_URL: http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - sazon-network
+
+volumes:
+  sazon_db_data:
+
+networks:
+  sazon-network:
+    driver: bridge
