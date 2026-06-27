@@ -10,8 +10,8 @@ from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from loguru import logger
 
-OLLAMA_ENDPOINT_GPU0 = os.getenv("OLLAMA_ENDPOINT_GPU0", "http://host.docker.internal:11434")
-OLLAMA_GPU0_MODEL = os.getenv("OLLAMA_GPU0_MODEL", "qwen2.5:27b")
+OLLAMA_ENDPOINT_GPU0 = os.getenv("OLLAMA_ENDPOINT_GPU0", "http://host.docker.internal:5555")
+OLLAMA_GPU0_MODEL = os.getenv("OLLAMA_GPU0_MODEL", "qwen3.6:35b")
 LLM_BACKEND = os.getenv("LLM_BACKEND", "ollama")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
