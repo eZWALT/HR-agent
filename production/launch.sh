@@ -2,11 +2,21 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-[[ -f "$SCRIPT_DIR/.env" ]] && source "$SCRIPT_DIR/.env" || { echo "no .env"; exit 1; }
-
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
 MODE="${1:-ollama}"
 
-COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
+# root .env is the single source of truth
+[[ -f "$ROOT_DIR/.env" ]] || { echo "no .env at $ROOT_DIR/.env"; exit 1; }
+source "$ROOT_DIR/.env"
+
+# docker compose needs .env next to the compose file — copy it over
+cp "$ROOT_DIR/.env" "$SCRIPT_DIR/.env"
+cleanup() {
+  rm -f "$SCRIPT_DIR/.env"
+  docker compose -f "$COMPOSE_FILE" down
+}
+trap cleanup EXIT INT TERM
 
 start_ollama_per_gpu() {
   local gpu_idx=0
@@ -14,7 +24,6 @@ start_ollama_per_gpu() {
     local port_var="OLLAMA_GPU${gpu_idx}_PORT"
     local models_var="OLLAMA_GPU${gpu_idx}_MODELS"
     local devices_var="OLLAMA_GPU${gpu_idx}_VISIBLE_DEVICES"
-
     [[ -z "${!port_var}" ]] && break
 
     CUDA_VISIBLE_DEVICES="${!devices_var}" \
@@ -32,7 +41,6 @@ start_ollama_per_gpu() {
     ((gpu_idx++))
   done
 
-  trap "kill $(jobs -p) 2>/dev/null; docker compose -f '$COMPOSE_FILE' down" EXIT INT TERM
   docker compose -f "$COMPOSE_FILE" up --build
 }
 
@@ -42,7 +50,6 @@ case "$MODE" in
     ;;
   openai)
     [[ -z "$OPENAI_API_KEY" ]] && { echo "need OPENAI_API_KEY"; exit 1; }
-    trap "docker compose -f '$COMPOSE_FILE' down" EXIT INT TERM
     docker compose -f "$COMPOSE_FILE" up --build
     ;;
 esac
