@@ -55,8 +55,9 @@ start_ollama_per_gpu() {
     fi
 
     for model in ${!models_var//,/ }; do
-      "$OLLAMA_BIN" list | grep -q "^$model" && continue
-      "$OLLAMA_BIN" pull "$model"
+      OLLAMA_HOST="localhost:${port}" "$OLLAMA_BIN" list 2>/dev/null | grep -q "^${model}" && continue
+      echo "  pulling ${model}..."
+      OLLAMA_HOST="localhost:${port}" "$OLLAMA_BIN" pull "$model" || echo "  WARN: pull ${model} failed"
     done
 
     ((gpu_idx++))
