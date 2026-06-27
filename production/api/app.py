@@ -62,6 +62,18 @@ async def _stream_openai(client, messages):
                 yield f"data: {chunk}\n\n"
 
 
+@app.get("/config")
+async def get_config():
+    # TODO: query `clients` table from DB for multi-tenant support.
+    #       The `clients` table has a `config JSONB` column for per-client settings.
+    return {
+        "client_name": "Grupo Sazón",
+        "assistant_name": "María",
+        "emoji": "🌶️",
+        "greeting": "¡Hola! Soy María, tu asistente de selección en Grupo Sazón. Para comenzar, ¿tienes licencia de conducir vigente?",
+    }
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}

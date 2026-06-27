@@ -5,19 +5,29 @@ import httpx
 
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
-st.set_page_config(page_title="Sazoncito — HR Agent", page_icon="🎯")
+if "config" not in st.session_state:
+    with httpx.Client() as c:
+        r = c.get(f"{BACKEND_URL}/config", timeout=10)
+        st.session_state.config = r.json()
+        st.session_state.messages = []
+        greeting = st.session_state.config.get("greeting", "")
+        if greeting:
+            st.session_state.messages.append({"role": "assistant", "content": greeting})
+
+config = st.session_state.config
+client_name = config.get("client_name", "Client")
+assistant_name = config.get("assistant_name", "Assistant")
+emoji = config.get("emoji", "💬")
+
+st.set_page_config(page_title=f"{client_name} — HR Agent", page_icon=emoji)
+st.html(f'<div style="font-size:3rem;line-height:1">{emoji}</div>')
+st.title(client_name, anchor=False)
 
 SUGGESTIONS = [
     "How does the hiring process work?",
     "What positions are available?",
-    "Help me screen a candidate",
+    "Tell me more about the company",
 ]
-
-st.html('<div style="font-size:3rem;line-height:1">🎯</div>')
-st.title("Sazoncito", anchor=False)
-
-if "messages" not in st.session_state:
-    st.session_state.messages = []
 
 if len(st.session_state.messages) == 0:
     selected = st.pills("Examples", options=SUGGESTIONS, label_visibility="collapsed")
