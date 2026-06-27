@@ -6,17 +6,11 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
 MODE="${1:-ollama}"
 
-# root .env is the single source of truth
 [[ -f "$ROOT_DIR/.env" ]] || { echo "no .env at $ROOT_DIR/.env"; exit 1; }
 source "$ROOT_DIR/.env"
 
-# docker compose needs .env next to the compose file — copy it over
-cp "$ROOT_DIR/.env" "$SCRIPT_DIR/.env"
-cleanup() {
-  rm -f "$SCRIPT_DIR/.env"
-  docker compose -f "$COMPOSE_FILE" down
-}
-trap cleanup EXIT INT TERM
+ENV_FILE="--env-file $ROOT_DIR/.env"
+trap "docker compose -f '$COMPOSE_FILE' down" EXIT INT TERM
 
 start_ollama_per_gpu() {
   local gpu_idx=0
@@ -41,7 +35,7 @@ start_ollama_per_gpu() {
     ((gpu_idx++))
   done
 
-  docker compose -f "$COMPOSE_FILE" up --build
+  docker compose $ENV_FILE -f "$COMPOSE_FILE" up --build
 }
 
 case "$MODE" in
@@ -50,6 +44,6 @@ case "$MODE" in
     ;;
   openai)
     [[ -z "$OPENAI_API_KEY" ]] && { echo "need OPENAI_API_KEY"; exit 1; }
-    docker compose -f "$COMPOSE_FILE" up --build
+    docker compose $ENV_FILE -f "$COMPOSE_FILE" up --build
     ;;
 esac
