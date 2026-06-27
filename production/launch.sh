@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
 MODE="${1:-ollama}"
 
-[[ -f "$ROOT_DIR/.env" ]] || { echo "no .env at $ROOT_DIR/.env"; exit 1; }
+[[ -f "$ROOT_DIR/.env" ]] || { echo "no .env at $ROOT_DIR/.env — copy .env.example to .env"; exit 1; }
 source "$ROOT_DIR/.env"
 
 ENV_FILE="--env-file $ROOT_DIR/.env"
