@@ -1,0 +1,226 @@
+{
+    "company": "Grupo Sazón",
+  
+    "faq": [
+      {
+        "id": "gsz_001",
+        "category": "general",
+        "question": {
+          "es": "¿Qué es Grupo Sazón?",
+          "en": "What is Grupo Sazón?"
+        },
+        "answer": {
+          "es": "Grupo Sazón es una cadena de restaurantes que ofrece servicio de comida a domicilio en varias ciudades de España y México, trabajando con una red de repartidores propios y colaboradores.",
+          "en": "Grupo Sazón is a restaurant chain offering food delivery services across multiple cities in Spain and Mexico, operating with a network of in-house and partner delivery drivers."
+        }
+      },
+  
+      {
+        "id": "gsz_002",
+        "category": "application_process",
+        "question": {
+          "es": "¿Cómo funciona el proceso de selección?",
+          "en": "How does the hiring process work?"
+        },
+        "answer": {
+          "es": "El proceso es completamente online a través de un asistente virtual que realiza unas preguntas básicas para validar tu perfil. Si cumples los requisitos, un recruiter se pondrá en contacto contigo.",
+          "en": "The process is fully online through a virtual assistant that asks basic screening questions. If you meet the requirements, a recruiter will contact you."
+        }
+      },
+  
+      {
+        "id": "gsz_003",
+        "category": "requirements",
+        "question": {
+          "es": "¿Qué necesito para trabajar como repartidor?",
+          "en": "What do I need to work as a delivery driver?"
+        },
+        "answer": {
+          "es": "Necesitas tener carnet de conducir válido, disponibilidad para trabajar y residir en una de las zonas operativas de la empresa.",
+          "en": "You need a valid driver's license, availability to work, and residence in one of the operational service areas."
+        }
+      },
+  
+      {
+        "id": "gsz_004",
+        "category": "requirements",
+        "question": {
+          "es": "¿Es obligatorio tener experiencia previa?",
+          "en": "Is previous experience required?"
+        },
+        "answer": {
+          "es": "No es obligatorio, aunque se valora experiencia en plataformas como Glovo, Uber Eats o Just Eat.",
+          "en": "It is not mandatory, although experience with platforms like Glovo, Uber Eats, or Just Eat is appreciated."
+        }
+      },
+  
+      {
+        "id": "gsz_005",
+        "category": "requirements",
+        "question": {
+          "es": "¿Puedo trabajar sin carnet de conducir?",
+          "en": "Can I work without a driver's license?"
+        },
+        "answer": {
+          "es": "No, el carnet de conducir es un requisito obligatorio para todas las posiciones de reparto.",
+          "en": "No, a valid driver's license is mandatory for all delivery positions."
+        }
+      },
+  
+      {
+        "id": "gsz_006",
+        "category": "schedule",
+        "question": {
+          "es": "¿Qué horarios están disponibles?",
+          "en": "What schedules are available?"
+        },
+        "answer": {
+          "es": "Ofrecemos turnos de mañana, tarde, noche y opciones flexibles dependiendo de la ciudad y la demanda.",
+          "en": "We offer morning, afternoon, night, and flexible shifts depending on city demand and availability."
+        }
+      },
+  
+      {
+        "id": "gsz_007",
+        "category": "payment",
+        "question": {
+          "es": "¿Cuánto se gana como repartidor?",
+          "en": "How much does a delivery driver earn?"
+        },
+        "answer": {
+          "es": "El salario varía según la ciudad y las horas trabajadas, con ingresos base entre 14.500€ y 18.500€ brutos anuales más incentivos por pedido.",
+          "en": "Salary varies by city and hours worked, with base earnings between €14,500 and €18,500 gross per year plus per-delivery incentives."
+        }
+      },
+  
+      {
+        "id": "gsz_008",
+        "category": "equipment",
+        "question": {
+          "es": "¿Necesito mi propio equipo?",
+          "en": "Do I need my own equipment?"
+        },
+        "answer": {
+          "es": "La empresa proporciona mochila térmica y equipamiento básico para el reparto.",
+          "en": "The company provides thermal bags and basic delivery equipment."
+        }
+      },
+  
+      {
+        "id": "gsz_009",
+        "category": "location",
+        "question": {
+          "es": "¿En qué ciudades puedo trabajar?",
+          "en": "Which cities can I work in?"
+        },
+        "answer": {
+          "es": "Actualmente operamos en varias ciudades de España y México, incluyendo Madrid, Barcelona, Valencia, Bilbao y CDMX entre otras.",
+          "en": "We currently operate in several cities in Spain and Mexico, including Madrid, Barcelona, Valencia, Bilbao, and Mexico City among others."
+        }
+      },
+  
+      {
+        "id": "gsz_010",
+        "category": "process",
+        "question": {
+          "es": "¿Cuánto tarda el proceso de contratación?",
+          "en": "How long does the hiring process take?"
+        },
+        "answer": {
+          "es": "Normalmente el proceso se completa en pocos días si el perfil es apto y la documentación está correcta.",
+          "en": "The hiring process usually takes a few days if the profile is suitable and documentation is correct."
+        }
+      },
+  
+      {
+        "id": "gsz_011",
+        "category": "eligibility",
+        "question": {
+          "es": "¿Puedo aplicar si vivo fuera de la ciudad?",
+          "en": "Can I apply if I live outside the city?"
+        },
+        "answer": {
+          "es": "Depende de la ciudad. Debes residir dentro o cerca de las zonas operativas activas.",
+          "en": "It depends on the city. You must live within or near active service zones."
+        }
+      },
+  
+      {
+        "id": "gsz_012",
+        "category": "support",
+        "question": {
+          "es": "¿Con quién puedo hablar si tengo dudas?",
+          "en": "Who can I contact if I have questions?"
+        },
+        "answer": {
+          "es": "Durante el proceso inicial puedes hablar con el asistente virtual. Después, un recruiter humano te contactará si avanzas.",
+          "en": "During the initial process you can speak with the virtual assistant. If you progress, a human recruiter will contact you."
+        }
+      },
+  
+      {
+        "id": "gsz_013",
+        "category": "hr_benefits",
+        "question": {
+          "es": "¿Tengo derecho a vacaciones?",
+          "en": "Do I get paid vacation?"
+        },
+        "answer": {
+          "es": "Sí, los repartidores con contrato tienen derecho a vacaciones pagadas según la legislación laboral del país.",
+          "en": "Yes, contracted delivery drivers are entitled to paid vacation according to local labor law."
+        }
+      },
+  
+      {
+        "id": "gsz_014",
+        "category": "hr_benefits",
+        "question": {
+          "es": "¿Hay baja por enfermedad?",
+          "en": "Do I get sick leave?"
+        },
+        "answer": {
+          "es": "Sí, en caso de enfermedad puedes acceder a baja médica según la normativa laboral vigente.",
+          "en": "Yes, in case of illness you are eligible for medical leave according to applicable labor regulations."
+        }
+      },
+  
+      {
+        "id": "gsz_015",
+        "category": "hr_benefits",
+        "question": {
+          "es": "¿Existe baja por maternidad o paternidad?",
+          "en": "Is there maternity or paternity leave?"
+        },
+        "answer": {
+          "es": "Sí, los empleados tienen derecho a permisos de maternidad y paternidad según la legislación laboral local.",
+          "en": "Yes, employees are entitled to maternity and paternity leave according to local labor law."
+        }
+      },
+  
+      {
+        "id": "gsz_016",
+        "category": "hr_benefits",
+        "question": {
+          "es": "¿Se pagan horas extra?",
+          "en": "Are overtime hours paid?"
+        },
+        "answer": {
+          "es": "Las horas extra o incentivos adicionales dependen del contrato y del volumen de pedidos asignados.",
+          "en": "Overtime and additional incentives depend on the contract and assigned order volume."
+        }
+      },
+  
+      {
+        "id": "gsz_017",
+        "category": "hr_benefits",
+        "question": {
+          "es": "¿Puedo cambiar mis turnos?",
+          "en": "Can I change my shifts?"
+        },
+        "answer": {
+          "es": "En muchos casos los turnos pueden ajustarse según disponibilidad y planificación del equipo.",
+          "en": "In many cases shifts can be adjusted based on availability and team planning."
+        }
+      }
+    ]
+  }

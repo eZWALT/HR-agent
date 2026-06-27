@@ -1,0 +1,223 @@
+{
+    "offers": [
+      {
+        "id": "madrid_center_driver",
+  
+        "title": {
+          "es": "Repartidor/a de comida a domicilio - Madrid Centro 🛵",
+          "en": "Food Delivery Driver - Madrid Central Area 🛵"
+        },
+  
+        "company": "Grupo Sazón",
+  
+        "location": {
+          "country": "Spain",
+          "city": "Madrid",
+          "zones": ["Chamberí", "Salamanca", "Retiro"],
+          "geo_constraint": "inside_M30"
+        },
+  
+        "job_type": {
+          "employment": ["full_time", "part_time"],
+          "salary": "15000–18000 EUR gross/year + bonuses"
+        },
+  
+        "overview": {
+          "es": "Buscamos repartidores para la zona centro de Madrid. Personas responsables, ágiles y con buen conocimiento de la ciudad.",
+          "en": "We are looking for delivery drivers in central Madrid. Reliable, fast individuals with good city knowledge."
+        },
+  
+        "requirements_mandatory": {
+          "drivers_license": true,
+          "residence": "Madrid province",
+          "weekend_availability": true
+        },
+  
+        "preferred_profile": {
+          "experience": ["Glovo", "Uber Eats", "Just Eat"],
+          "city_knowledge": true
+        },
+  
+        "screening_config": {
+          "required_fields": [
+            "drivers_license",
+            "city",
+            "availability",
+            "preferred_schedule",
+            "delivery_experience",
+            "start_date",
+            "full_name"
+          ],
+          "hard_filters": {
+            "drivers_license_required": true,
+            "city_must_be_supported": true
+          }
+        }
+      },
+  
+      {
+        "id": "barcelona_delivery_driver",
+  
+        "title": {
+          "es": "Repartidor/a de comida a domicilio - Barcelona 🛵",
+          "en": "Food Delivery Driver - Barcelona 🛵"
+        },
+  
+        "company": "Grupo Sazón",
+  
+        "location": {
+          "country": "Spain",
+          "city": "Barcelona",
+          "zones": ["Eixample", "Gràcia", "Sants"],
+          "geo_constraint": "urban_center"
+        },
+  
+        "job_type": {
+          "employment": ["full_time", "part_time"],
+          "salary": "15000–18500 EUR gross/year + bonuses"
+        },
+  
+        "overview": {
+          "es": "Incorporamos repartidores en Barcelona para cubrir zonas urbanas con alta demanda de pedidos.",
+          "en": "We are hiring delivery drivers in Barcelona to cover high-demand urban areas."
+        },
+  
+        "requirements_mandatory": {
+          "drivers_license": true,
+          "residence": "Barcelona province",
+          "weekend_availability": true
+        },
+  
+        "preferred_profile": {
+          "experience": ["Glovo", "Uber Eats", "Just Eat"],
+          "city_knowledge": true
+        },
+  
+        "screening_config": {
+          "required_fields": [
+            "drivers_license",
+            "city",
+            "availability",
+            "preferred_schedule",
+            "delivery_experience",
+            "start_date",
+            "full_name"
+          ],
+          "hard_filters": {
+            "drivers_license_required": true,
+            "city_must_be_supported": true
+          }
+        }
+      },
+  
+      {
+        "id": "valencia_delivery_driver",
+  
+        "title": {
+          "es": "Repartidor/a de comida a domicilio - Valencia 🛵",
+          "en": "Food Delivery Driver - Valencia 🛵"
+        },
+  
+        "company": "Grupo Sazón",
+  
+        "location": {
+          "country": "Spain",
+          "city": "Valencia",
+          "zones": ["Ciutat Vella", "Ruzafa", "Camins al Grau"],
+          "geo_constraint": "city_center"
+        },
+  
+        "job_type": {
+          "employment": ["full_time", "part_time"],
+          "salary": "14500–17500 EUR gross/year + bonuses"
+        },
+  
+        "overview": {
+          "es": "Buscamos repartidores en Valencia para reforzar nuestro servicio en zonas céntricas y turísticas.",
+          "en": "We are hiring delivery drivers in Valencia to strengthen operations in central and tourist areas."
+        },
+  
+        "requirements_mandatory": {
+          "drivers_license": true,
+          "residence": "Valencia province",
+          "weekend_availability": true
+        },
+  
+        "preferred_profile": {
+          "experience": ["Glovo", "Uber Eats", "Just Eat"],
+          "city_knowledge": true
+        },
+  
+        "screening_config": {
+          "required_fields": [
+            "drivers_license",
+            "city",
+            "availability",
+            "preferred_schedule",
+            "delivery_experience",
+            "start_date",
+            "full_name"
+          ],
+          "hard_filters": {
+            "drivers_license_required": true,
+            "city_must_be_supported": true
+          }
+        }
+      },
+  
+      {
+        "id": "bilbao_delivery_driver",
+  
+        "title": {
+          "es": "Repartidor/a de comida a domicilio - Bilbao 🛵",
+          "en": "Food Delivery Driver - Bilbao 🛵"
+        },
+  
+        "company": "Grupo Sazón",
+  
+        "location": {
+          "country": "Spain",
+          "city": "Bilbao",
+          "zones": ["Indautxu", "Casco Viejo", "Deusto"],
+          "geo_constraint": "urban_center"
+        },
+  
+        "job_type": {
+          "employment": ["full_time", "part_time"],
+          "salary": "15000–18000 EUR gross/year + bonuses"
+        },
+  
+        "overview": {
+          "es": "Incorporamos repartidores en Bilbao para cubrir rutas urbanas con alta rotación de pedidos.",
+          "en": "We are hiring delivery drivers in Bilbao for high-volume urban delivery routes."
+        },
+  
+        "requirements_mandatory": {
+          "drivers_license": true,
+          "residence": "Bilbao area",
+          "weekend_availability": true
+        },
+  
+        "preferred_profile": {
+          "experience": ["Glovo", "Uber Eats", "Just Eat"],
+          "city_knowledge": true
+        },
+  
+        "screening_config": {
+          "required_fields": [
+            "drivers_license",
+            "city",
+            "availability",
+            "preferred_schedule",
+            "delivery_experience",
+            "start_date",
+            "full_name"
+          ],
+          "hard_filters": {
+            "drivers_license_required": true,
+            "city_must_be_supported": true
+          }
+        }
+      }
+    ]
+  }
